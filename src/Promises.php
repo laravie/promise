@@ -156,16 +156,17 @@ class Promises implements ExtendedPromiseInterface
         $promises = [];
 
         foreach ($this->promises as $data) {
-            $deferred = new Deferred();
-            $promise = $deferred->promise();
+            $promise = new Promise(function ($resolve) use ($data) {
+                $resolve($data);
+            });
 
             foreach ($this->actions as $action) {
                 list($method, $parameters) = $action;
 
-                $promise->{$method}(...$parameters);
+                $promise = $promise->{$method}(...$parameters);
             }
 
-            $promises[] = $deferred->resolve($data);
+            $promises[] = $promise;
         }
 
         return $promises;
