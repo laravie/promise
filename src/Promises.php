@@ -2,7 +2,7 @@
 
 namespace Laravie\Promise;
 
-use React\Promise\Deferred;
+use React\Promise\Promise;
 use Illuminate\Support\Collection;
 use React\Promise\ExtendedPromiseInterface;
 
