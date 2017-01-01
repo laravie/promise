@@ -155,6 +155,20 @@ class Promises implements ExtendedPromiseInterface
     {
         $promises = [];
 
+        foreach ($this->attachPromisesToActions() as $promise) {
+            $promises[] = $promise;
+        }
+
+        return $promises;
+    }
+
+    /**
+     * Attach promises to generator and yield the promise.
+     *
+     * @return void
+     */
+    protected function attachPromisesToActions()
+    {
         foreach ($this->promises as $data) {
             $promise = new Promise(function ($resolve) use ($data) {
                 $resolve($data);
@@ -166,9 +180,7 @@ class Promises implements ExtendedPromiseInterface
                 $promise = $promise->{$method}(...$parameters);
             }
 
-            $promises[] = $promise;
+            yield $promise;
         }
-
-        return $promises;
     }
 }
