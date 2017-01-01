@@ -2,10 +2,11 @@
 
 namespace Laravie\Promise;
 
-use React\Promise\Promise;
+use React\Promise\Deferred;
 use Illuminate\Support\Collection;
+use React\Promise\ExtendedPromiseInterface;
 
-class Promises
+class Promises implements ExtendedPromiseInterface
 {
     /**
      * Lists of actions.
@@ -36,9 +37,9 @@ class Promises
      *
      * @return $this
      */
-    public function then(...$parameters)
+    public function then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
-        $this->actions[] = ['then', $parameters];
+        $this->actions[] = ['then', [$onFulfilled, $onRejected, $onProgress]];
 
         return $this;
     }
@@ -48,9 +49,9 @@ class Promises
      *
      * @return $this
      */
-    public function otherwise(...$parameters)
+    public function otherwise(callable $onRejected)
     {
-        $this->actions[] = ['otherwise', $parameters];
+        $this->actions[] = ['otherwise', [$onRejected]];
 
         return $this;
     }
@@ -60,9 +61,33 @@ class Promises
      *
      * @return $this
      */
-    public function done(...$parameters)
+    public function done(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
-        $this->actions[] = ['done', $parameters];
+        $this->actions[] = ['done', [$onFulfilled, $onRejected, $onProgress]];
+
+        return $this;
+    }
+
+    /**
+     * Queue "always" for each promises.
+     *
+     * @return $this
+     */
+    public function always(callable $onFulfilledOrRejected)
+    {
+        $this->actions[] = ['always', [$onFulfilledOrRejected]];
+
+        return $this;
+    }
+
+    /**
+     * Queue "progress" for each promises.
+     *
+     * @return $this
+     */
+    public function progress(callable $onProgress)
+    {
+        $this->actions[] = ['progress', [$onProgress]];
 
         return $this;
     }
@@ -94,9 +119,7 @@ class Promises
      */
     public function queue($data)
     {
-        $this->promises[] = function ($resolve) use ($data) {
-            $resolve($data);
-        };
+        $this->promises[] = $data;
 
         return $this;
     }
@@ -132,16 +155,17 @@ class Promises
     {
         $promises = [];
 
-        foreach ($this->promises as $factory) {
-            $promise = new Promise($factory);
+        foreach ($this->promises as $data) {
+            $deferred = new Deferred();
+            $promise = $deferred->promise();
 
             foreach ($this->actions as $action) {
                 list($method, $parameters) = $action;
 
-                $promise = $promise->{$method}(...$parameters);
+                $promise->{$method}(...$parameters);
             }
 
-            $promises[] = $promise;
+            $promises[] = $deferred->resolve($data);
         }
 
         return $promises;

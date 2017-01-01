@@ -21,6 +21,11 @@
     "require-dev": {
         "phpunit/phpunit": "~5.0"
     },
+    "extra": {
+        "branch-aliases": {
+            "dev-master": "0.1-dev"
+        }
+    },
     "config": {
         "sort-packages": true
     },
