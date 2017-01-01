@@ -2,10 +2,8 @@
 
 namespace Laravie\Promise;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Collection;
-use React\Promise\Deferred;
 use React\Promise\Promise;
+use Illuminate\Support\Collection;
 
 class Promises
 {
@@ -80,8 +78,6 @@ class Promises
     {
         if ($collection instanceof Collection) {
             $collection = $collection->all();
-        } elseif ($collection instanceof Arrayable) {
-            $collection = $collection->toArray();
         }
 
         foreach ($collection as $data) {
@@ -98,7 +94,9 @@ class Promises
      */
     public function queue($data)
     {
-        $this->promises[] = $data;
+        $this->promises[] = function ($resolve) use ($data) {
+            $resolve($data);
+        };
 
         return $this;
     }
@@ -134,9 +132,8 @@ class Promises
     {
         $promises = [];
 
-        foreach ($this->promises as $data) {
-            $deferred = new Deferred();
-            $promise = $deferred->promise();
+        foreach ($this->promises as $factory) {
+            $promise = new Promise($factory);
 
             foreach ($this->actions as $action) {
                 list($method, $parameters) = $action;
@@ -144,7 +141,7 @@ class Promises
                 $promise = $promise->{$method}(...$parameters);
             }
 
-            $promises[] = $deferred->resolve($data);
+            $promises[] = $promise;
         }
 
         return $promises;
