@@ -2,6 +2,7 @@
 
 namespace Laravie\Promise;
 
+use React\Promise\Promise;
 use React\Promise\ExtendedPromiseInterface;
 
 abstract class Actionable implements ExtendedPromiseInterface
@@ -113,12 +114,16 @@ abstract class Actionable implements ExtendedPromiseInterface
     }
 
     /**
-     * Attach promises to generator and yield the promise.
+     * Build promises.
      *
-     * @return void
+     * @return \React\Promise\Deferred
      */
-    protected function attachPromisesToActions(ExtendedPromiseInterface $promise)
+    protected function buildPromise($data)
     {
+        $promise = (new Promise(function ($resolve) use ($data) {
+            $resolve($data);
+        }));
+
         foreach ($this->actions as $action) {
             list($method, $parameters) = $action;
 

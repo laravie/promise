@@ -2,16 +2,32 @@
 
 namespace Laravie\Promise;
 
-class Promises extends Actionable
+use React\EventLoop\Factory;
+
+class AsyncPromises extends Actionable
 {
     /**
      * Create a new collection.
      *
      * @return $this
      */
-    public static function create()
+    public static function create($loop = null)
     {
-        return new static();
+        return new static($loop);
+    }
+
+    /**
+     * Construct async promises.
+     *
+     * @param object|null $loop
+     */
+    public function __construct($loop = null)
+    {
+        if (is_null($loop)) {
+            $loop = Factory::create();
+        }
+
+        $this->loop = $loop;
     }
 
     /**
@@ -43,8 +59,6 @@ class Promises extends Actionable
     /**
      * Merge promises to actions.
      *
-     * @param  callable  $callback
-     *
      * @return array
      */
     protected function resolvePromises(callable $callback)
@@ -52,8 +66,12 @@ class Promises extends Actionable
         $promises = [];
 
         foreach ($this->promises as $data) {
-            $promises[] = $this->buildPromise($data);
+            $this->loop->addTimer(0.01, function () use ($data, &$promises) {
+                $promises[] = $this->buildPromise($data);
+            });
         }
+
+        $this->loop->run();
 
         return $callback($promises);
     }
