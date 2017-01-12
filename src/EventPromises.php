@@ -4,7 +4,7 @@ namespace Laravie\Promise;
 
 use React\EventLoop\Factory;
 
-class AsyncPromises extends Actionable
+class EventPromises extends Actionable
 {
     /**
      * Create a new collection.

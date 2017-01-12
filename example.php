@@ -2,7 +2,7 @@
 
 require "vendor/autoload.php";
 
-$promises = Laravie\Promise\AsyncPromises::create();
+$promises = Laravie\Promise\EventPromises::create();
 
 $promises->then(function ($url) {
     print("Fetching {$url}".PHP_EOL);
