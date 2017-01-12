@@ -113,14 +113,27 @@ abstract class Actionable implements ExtendedPromiseInterface
     }
 
     /**
+     * Attach promises to generator and yield the promise.
+     *
+     * @return void
+     */
+    protected function attachPromisesToActions(ExtendedPromiseInterface $promise)
+    {
+        foreach ($this->actions as $action) {
+            list($method, $parameters) = $action;
+
+            $promise = $promise->{$method}(...$parameters);
+        }
+
+        return $promise;
+    }
+
+    /**
      * All promises.
      *
      * @return \React\Promise\PromiseInterface|mixed
      */
-    public function all()
-    {
-        return \React\Promise\all($this->resolvePromises());
-    }
+    abstract public function all();
 
     /**
      * Map promises.
@@ -129,31 +142,5 @@ abstract class Actionable implements ExtendedPromiseInterface
      *
      * @return \React\Promise\PromiseInterface|mixed
      */
-    public function map(callable $callback)
-    {
-        return \React\Promise\map($this->resolvePromises(), $callback);
-    }
-
-    /**
-     * Merge promises to actions.
-     *
-     * @return array
-     */
-    protected function resolvePromises()
-    {
-        $promises = [];
-
-        foreach ($this->attachPromisesToActions() as $promise) {
-            $promises[] = $promise;
-        }
-
-        return $promises;
-    }
-
-    /**
-     * Attach promises to generator and yield the promise.
-     *
-     * @return void
-     */
-    abstract protected function attachPromisesToActions();
+    abstract public function map(callable $callback);
 }
