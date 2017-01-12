@@ -66,7 +66,7 @@ class AsyncPromises extends Actionable
         $promises = [];
 
         foreach ($this->promises as $data) {
-            $this->loop->addTimer(0.1, function () use ($data, &$promises) {
+            $this->loop->nextTick(function () use ($data, &$promises) {
                 $promises[] = $this->buildPromise($data);
             });
         }
