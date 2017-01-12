@@ -22,7 +22,7 @@
         "phpunit/phpunit": "~5.0"
     },
     "extra": {
-        "branch-aliases": {
+        "branch-alias": {
             "dev-master": "0.1-dev"
         }
     },
