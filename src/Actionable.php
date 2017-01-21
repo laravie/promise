@@ -114,6 +114,32 @@ abstract class Actionable implements ExtendedPromiseInterface
     }
 
     /**
+     * All promises.
+     *
+     * @return \React\Promise\PromiseInterface|mixed
+     */
+    public function all()
+    {
+        return $this->resolvePromises(function (array $promises) {
+            return \React\Promise\all($promises);
+        });
+    }
+
+    /**
+     * Map promises.
+     *
+     * @param callable $callback
+     *
+     * @return \React\Promise\PromiseInterface|mixed
+     */
+    public function map(callable $callback)
+    {
+        return $this->resolvePromises(function (array $promises) use ($callback) {
+            return \React\Promise\map($promises, $callback);
+        });
+    }
+
+    /**
      * Build promises.
      *
      * @return \React\Promise\Deferred
@@ -132,20 +158,4 @@ abstract class Actionable implements ExtendedPromiseInterface
 
         return $promise;
     }
-
-    /**
-     * All promises.
-     *
-     * @return \React\Promise\PromiseInterface|mixed
-     */
-    abstract public function all();
-
-    /**
-     * Map promises.
-     *
-     * @param callable $callback
-     *
-     * @return \React\Promise\PromiseInterface|mixed
-     */
-    abstract public function map(callable $callback);
 }
