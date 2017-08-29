@@ -3,15 +3,18 @@
 namespace Laravie\Promise;
 
 use React\EventLoop\Factory;
+use React\EventLoop\LoopInterface;
 
 class EventPromises extends Actionable
 {
     /**
      * Create a new collection.
      *
+     * @param \React\EventLoop\LoopInterface|null $loop
+     *
      * @return $this
      */
-    public static function create($loop = null)
+    public static function create(LoopInterface $loop = null)
     {
         return new static($loop);
     }
@@ -19,9 +22,9 @@ class EventPromises extends Actionable
     /**
      * Construct async promises.
      *
-     * @param object|null $loop
+     * @param \React\EventLoop\LoopInterface|null $loop
      */
-    public function __construct($loop = null)
+    public function __construct(LoopInterface $loop = null)
     {
         if (is_null($loop)) {
             $loop = Factory::create();
