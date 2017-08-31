@@ -2,7 +2,7 @@
 
 use Laravie\Promise\Promises;
 
-class PromisesTest extends PHPUnit_Framework_TestCase
+class PromisesTest extends PHPUnit\Framework\TestCase
 {
     /** @test */
     public function it_can_throws_exception()
