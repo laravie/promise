@@ -120,9 +120,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      */
     public function all()
     {
-        return $this->resolvePromises(function (array $promises) {
-            return \React\Promise\all($promises);
-        });
+        return \React\Promise\all($this->resolvePromises());
     }
 
     /**
@@ -134,9 +132,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      */
     public function map(callable $callback)
     {
-        return $this->resolvePromises(function (array $promises) use ($callback) {
-            return \React\Promise\map($promises, $callback);
-        });
+        return \React\Promise\map($this->resolvePromises(), $callback);
     }
 
     /**

@@ -50,6 +50,6 @@ class EventPromises extends Actionable
 
         $this->loop->run();
 
-        return $callback($promises);
+        return $promises;
     }
 }
