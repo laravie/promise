@@ -1,12 +1,40 @@
 <?php
 
 use Laravie\Promise\Promises;
+use function React\Promise\resolve;
 
 class PromisesTest extends PHPUnit\Framework\TestCase
 {
     /** @test */
+    public function it_can_handle_async_when_given_object()
+    {
+        $results = [];
+        $promises = Promises::create();
+
+        $promises->then(function ($value) {
+            $value->name .= 'bar';
+
+            return $value;
+        })
+        ->then(function ($value) {
+            $value->age += 10;
+
+            return $value;
+        })
+        ->queues([(object) ['name' => 'foo', 'age' => 10]])
+        ->all()
+        ->then(function ($values) use (&$results) {
+            $results = $values;
+        });
+
+        $this->assertSame('foobar', $results[0]->name);
+        $this->assertSame(20, $results[0]->age);
+    }
+
+    /** @test */
     public function it_can_throws_exception()
     {
+        $results = [];
         $promises = Promises::create();
 
         $promises->then(function ($value) {
@@ -20,8 +48,10 @@ class PromisesTest extends PHPUnit\Framework\TestCase
         })
         ->queues([1, 2])
         ->all()
-        ->then(function ($values) {
-            $this->assertEquals([4, 5], $values);
+        ->then(function ($values) use (&$results) {
+            $results = $values;
         });
+
+        $this->assertEquals([4, 5], $results);
     }
 }

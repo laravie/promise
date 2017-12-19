@@ -7,6 +7,7 @@ class EventPromisesTest extends PHPUnit\Framework\TestCase
     /** @test */
     public function it_can_throws_exception()
     {
+        $results = [];
         $promises = EventPromises::create();
 
         $promises->then(function ($value) {
@@ -20,8 +21,11 @@ class EventPromisesTest extends PHPUnit\Framework\TestCase
         })
         ->queues([1, 2])
         ->all()
-        ->then(function ($values) {
-            $this->assertEquals([4, 5], $values);
+        ->then(function ($values) use (&$results) {
+            $results = $values;
         });
+
+
+        $this->assertEquals([4, 5], $results);
     }
 }
