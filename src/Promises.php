@@ -26,9 +26,11 @@ class Promises extends Actionable
      */
     protected function resolvePromises(callable $callback)
     {
-        $promises = wait(parallelMap($this->promises, function ($data) {
-            return $this->buildPromise($data);
-        }));
+        $promises = [];
+
+        foreach ($this->promises as $data) {
+            $promises[] = $this->buildPromise($data);
+        }
 
         return $callback($promises);
     }
