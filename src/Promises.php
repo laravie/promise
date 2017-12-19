@@ -24,10 +24,14 @@ class Promises extends Actionable
      *
      * @return array
      */
-    protected function resolvePromises(callable $callback)
+    protected function resolvePromises(): array
     {
-        return wait(parallelMap($this->promises, function ($promise) {
-            return $this->buildPromise($promise);
-        }));
+        $promises = [];
+
+        foreach ($this->promises as $data) {
+            $promises[] = $this->buildPromise($data);
+        }
+
+        return $promises;
     }
 }

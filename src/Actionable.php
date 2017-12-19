@@ -138,7 +138,7 @@ abstract class Actionable implements ExtendedPromiseInterface
     /**
      * Build promises.
      *
-     * @return \React\Promise\Deferred
+     * @return \React\Promise\Promise
      */
     protected function buildPromise($data)
     {
