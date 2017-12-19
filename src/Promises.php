@@ -2,6 +2,9 @@
 
 namespace Laravie\Promise;
 
+use function Amp\Promise\wait;
+use function Amp\ParallelFunctions\parallelMap;
+
 class Promises extends Actionable
 {
     /**
@@ -23,11 +26,9 @@ class Promises extends Actionable
      */
     protected function resolvePromises(callable $callback)
     {
-        $promises = [];
-
-        foreach ($this->promises as $data) {
-            $promises[] = $this->buildPromise($data);
-        }
+        $promises = wait(parallelMap($this->promises, function ($data) {
+            return $this->buildPromise($data);
+        }));
 
         return $callback($promises);
     }
