@@ -38,7 +38,7 @@ class EventPromises extends Actionable
      *
      * @return array
      */
-    protected function resolvePromises()
+    protected function resolvePromises(): array
     {
         $promises = [];
 
