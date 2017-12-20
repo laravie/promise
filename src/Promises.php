@@ -7,7 +7,7 @@ class Promises extends Actionable
     /**
      * Create a new collection.
      *
-     * @return $this
+     * @return static
      */
     public static function create()
     {

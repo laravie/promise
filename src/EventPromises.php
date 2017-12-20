@@ -12,7 +12,7 @@ class EventPromises extends Actionable
      *
      * @param \React\EventLoop\LoopInterface|null $loop
      *
-     * @return $this
+     * @return static
      */
     public static function create(LoopInterface $loop = null)
     {
