@@ -20,7 +20,7 @@
     },
     "require-dev": {
         "amphp/parallel-functions": "^0.1.2",
-        "phpunit/phpunit": "~5.7 || ~6.0",
+        "phpunit/phpunit": "~6.0",
         "react/event-loop": "~0.4"
     },
     "suggest": {
