@@ -8,8 +8,10 @@ php:
   - 7.2
 
 env:
-  global:
+  matrix:
     - setup=basic
+    - setup=lowest
+    - setup=stable
 
 before_script:
   - travis_retry composer self-update
@@ -22,11 +24,6 @@ script:
   - vendor/bin/phpunit -c phpunit.xml
 
 matrix:
-  include:
-    - php: 7.0
-      env: setup=lowest
-    - php: 7.0
-      env: setup=stable
   allow_failures:
     - env: setup=lowest
   fast_finish: true
