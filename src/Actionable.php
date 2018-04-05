@@ -26,7 +26,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      *
      * @return $this
      */
-    public function then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null): self
+    final public function then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null): self
     {
         $this->actions[] = ['then', [$onFulfilled, $onRejected, $onProgress]];
 
@@ -38,7 +38,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      *
      * @return $this
      */
-    public function otherwise(callable $onRejected): self
+    final public function otherwise(callable $onRejected): self
     {
         $this->actions[] = ['otherwise', [$onRejected]];
 
@@ -50,7 +50,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      *
      * @return $this
      */
-    public function done(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null): self
+    final public function done(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null): self
     {
         $this->actions[] = ['done', [$onFulfilled, $onRejected, $onProgress]];
 
@@ -62,7 +62,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      *
      * @return $this
      */
-    public function always(callable $onFulfilledOrRejected): self
+    final public function always(callable $onFulfilledOrRejected): self
     {
         $this->actions[] = ['always', [$onFulfilledOrRejected]];
 
@@ -74,7 +74,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      *
      * @return $this
      */
-    public function progress(callable $onProgress): self
+    final public function progress(callable $onProgress): self
     {
         $this->actions[] = ['progress', [$onProgress]];
 
@@ -88,7 +88,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      *
      * @return $this
      */
-    public function queues($collection): self
+    public function queues($collection)
     {
         if ($collection instanceof Collection) {
             $collection = $collection->all();
@@ -106,7 +106,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      *
      * @return $this
      */
-    public function queue($data): self
+    public function queue($data)
     {
         $this->promises[] = $data;
 
