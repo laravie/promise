@@ -43,7 +43,7 @@ class EventPromises extends Actionable
         $promises = [];
 
         foreach ($this->promises as $data) {
-            $this->loop->nextTick(function () use ($data, &$promises) {
+            $this->loop->futureTick(function () use ($data, &$promises) {
                 $promises[] = $this->buildPromise($data);
             });
         }

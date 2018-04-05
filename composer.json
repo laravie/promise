@@ -21,7 +21,7 @@
     "require-dev": {
         "amphp/parallel-functions": "^0.1.2",
         "phpunit/phpunit": "^6.0",
-        "react/event-loop": "^0.4"
+        "react/event-loop": "^0.4 || ^0.5"
     },
     "suggest": {
         "amphp/parallel-functions": "To use ParallelPromises (~0.1.2).",
