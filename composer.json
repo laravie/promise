@@ -15,17 +15,17 @@
         }
     },
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.1",
         "react/promise": "^2.5"
     },
     "require-dev": {
         "amphp/parallel-functions": "^0.1.2",
-        "phpunit/phpunit": "^6.0",
-        "react/event-loop": "^0.4 || ^0.5"
+        "phpunit/phpunit": "^7.0",
+        "react/event-loop": "^1.0"
     },
     "suggest": {
-        "amphp/parallel-functions": "To use ParallelPromises (~0.1.2).",
-        "react/event-loop": "To use EventPromises (~0.4)."
+        "amphp/parallel-functions": "To use ParallelPromises (^0.1.2).",
+        "react/event-loop": "To use EventPromises (^1.0)."
     },
     "extra": {
         "branch-alias": {
