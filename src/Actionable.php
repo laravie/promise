@@ -26,7 +26,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      *
      * @return $this
      */
-    final public function then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null): self
+    final public function then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
         $this->actions[] = ['then', [$onFulfilled, $onRejected, $onProgress]];
 
@@ -38,7 +38,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      *
      * @return $this
      */
-    final public function otherwise(callable $onRejected): self
+    final public function otherwise(callable $onRejected)
     {
         $this->actions[] = ['otherwise', [$onRejected]];
 
@@ -50,7 +50,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      *
      * @return $this
      */
-    final public function done(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null): self
+    final public function done(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
         $this->actions[] = ['done', [$onFulfilled, $onRejected, $onProgress]];
 
@@ -62,7 +62,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      *
      * @return $this
      */
-    final public function always(callable $onFulfilledOrRejected): self
+    final public function always(callable $onFulfilledOrRejected)
     {
         $this->actions[] = ['always', [$onFulfilledOrRejected]];
 
@@ -74,7 +74,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      *
      * @return $this
      */
-    final public function progress(callable $onProgress): self
+    final public function progress(callable $onProgress)
     {
         $this->actions[] = ['progress', [$onProgress]];
 
@@ -84,16 +84,12 @@ abstract class Actionable implements ExtendedPromiseInterface
     /**
      * Queue multiple promises.
      *
-     * @param \Illuminate\Support\Collection|\Illuminate\Contracts\Support\Arrayable|array $collection
+     * @param array $collection
      *
      * @return $this
      */
     public function queues($collection)
     {
-        if ($collection instanceof Collection) {
-            $collection = $collection->all();
-        }
-
         foreach ($collection as $data) {
             $this->queue($data);
         }

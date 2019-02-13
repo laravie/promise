@@ -26,7 +26,7 @@ class EventPromises extends Actionable
      */
     public function __construct(LoopInterface $loop = null)
     {
-        if (is_null($loop)) {
+        if (\is_null($loop)) {
             $loop = Factory::create();
         }
 
