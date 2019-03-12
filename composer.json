@@ -19,12 +19,10 @@
         "react/promise": "^2.5"
     },
     "require-dev": {
-        "amphp/parallel-functions": "^0.1.2",
         "phpunit/phpunit": "^7.5 || ^8.0",
         "react/event-loop": "^1.0"
     },
     "suggest": {
-        "amphp/parallel-functions": "To use ParallelPromises (^0.1.2).",
         "react/event-loop": "To use EventPromises (^1.0)."
     },
     "extra": {
