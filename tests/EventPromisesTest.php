@@ -25,7 +25,6 @@ class EventPromisesTest extends PHPUnit\Framework\TestCase
             $results = $values;
         });
 
-
         $this->assertEquals([4, 5], $results);
     }
 }

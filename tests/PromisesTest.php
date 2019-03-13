@@ -1,7 +1,6 @@
 <?php
 
 use Laravie\Promise\Promises;
-use function React\Promise\resolve;
 
 class PromisesTest extends PHPUnit\Framework\TestCase
 {
