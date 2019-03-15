@@ -13,22 +13,4 @@ class Promises extends Actionable
     {
         return new static();
     }
-
-    /**
-     * Merge promises to actions.
-     *
-     * @param  callable  $callback
-     *
-     * @return array
-     */
-    protected function resolvePromises(): array
-    {
-        $promises = [];
-
-        foreach ($this->promises as $promise) {
-            $promises[] = $this->buildPromise($promise);
-        }
-
-        return $promises;
-    }
 }

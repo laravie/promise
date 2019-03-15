@@ -3,6 +3,7 @@
 namespace Laravie\Promise;
 
 use React\Promise\Promise;
+use React\Promise\FulfilledPromise;
 use React\Promise\ExtendedPromiseInterface;
 
 abstract class Actionable implements ExtendedPromiseInterface
@@ -15,11 +16,11 @@ abstract class Actionable implements ExtendedPromiseInterface
     protected $actions = [];
 
     /**
-     * List of promises.
+     * List of resolved promises.
      *
      * @var array
      */
-    protected $promises = [];
+    protected $resolvedPromises = [];
 
     /**
      * Queue "then" for each promises.
@@ -84,11 +85,11 @@ abstract class Actionable implements ExtendedPromiseInterface
     /**
      * Queue multiple promises.
      *
-     * @param array $collection
+     * @param iterable $collection
      *
      * @return $this
      */
-    public function queues($collection)
+    public function queues(iterable $collection)
     {
         foreach ($collection as $data) {
             $this->queue($data);
@@ -104,7 +105,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      */
     public function queue($data)
     {
-        $this->promises[] = $data;
+        $this->resolvedPromises[] = $this->buildPromise($data);
 
         return $this;
     }
@@ -116,7 +117,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      */
     public function all()
     {
-        return \React\Promise\all($this->resolvePromises());
+        return \React\Promise\all($this->resolvedPromises);
     }
 
     /**
@@ -128,15 +129,15 @@ abstract class Actionable implements ExtendedPromiseInterface
      */
     public function map(callable $callback)
     {
-        return \React\Promise\map($this->resolvePromises(), $callback);
+        return \React\Promise\map($this->resolvedPromises, $callback);
     }
 
     /**
      * Build promises.
      *
-     * @return \React\Promise\Promise
+     * @return \React\Promise\FulfilledPromise
      */
-    protected function buildPromise($data)
+    protected function buildPromise($data): FulfilledPromise
     {
         $promise = (new Promise(function ($resolve) use ($data) {
             $resolve($data);
