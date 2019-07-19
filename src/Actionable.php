@@ -139,7 +139,7 @@ abstract class Actionable implements ExtendedPromiseInterface
      */
     protected function buildPromise($data): FulfilledPromise
     {
-        $promise = (new Promise(function ($resolve) use ($data) {
+        $promise = (new Promise(static function ($resolve) use ($data) {
             $resolve($data);
         }));
 
