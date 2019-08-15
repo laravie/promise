@@ -3,7 +3,9 @@
 namespace Laravie\Promise;
 
 use React\Promise\Promise;
-use React\Promise\FulfilledPromise;
+use function React\Promise\all;
+use function React\Promise\map;
+use React\Promise\PromiseInterface;
 use React\Promise\ExtendedPromiseInterface;
 
 abstract class Actionable implements ExtendedPromiseInterface
@@ -99,25 +101,13 @@ abstract class Actionable implements ExtendedPromiseInterface
     }
 
     /**
-     * Queue a promise.
-     *
-     * @return $this
-     */
-    public function queue($data)
-    {
-        $this->resolvedPromises[] = $this->buildPromise($data);
-
-        return $this;
-    }
-
-    /**
      * All promises.
      *
      * @return \React\Promise\PromiseInterface|mixed
      */
     public function all()
     {
-        return \React\Promise\all($this->resolvedPromises);
+        return all($this->resolvedPromises);
     }
 
     /**
@@ -129,26 +119,27 @@ abstract class Actionable implements ExtendedPromiseInterface
      */
     public function map(callable $callback)
     {
-        return \React\Promise\map($this->resolvedPromises, $callback);
+        return map($this->resolvedPromises, $callback);
     }
 
     /**
-     * Build promises.
+     * Resolved a promise.
      *
-     * @return \React\Promise\FulfilledPromise
+     * @param  \React\Promise\PromiseInterface  $promise
+     *
+     * @return void
      */
-    protected function buildPromise($data): FulfilledPromise
+    protected function resolvePromise(PromiseInterface $promise): void
     {
-        $promise = (new Promise(static function ($resolve) use ($data) {
-            $resolve($data);
-        }));
-
-        foreach ($this->actions as $action) {
-            list($method, $parameters) = $action;
-
-            $promise = $promise->{$method}(...$parameters);
-        }
-
-        return $promise;
+        $this->resolvedPromises[] = $promise;
     }
+
+    /**
+     * Queue a promise.
+     *
+     * @param  mixed  $data
+     *
+     * @return $this
+     */
+    abstract public function queue($data);
 }
